@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: parties_chat
+  main:
+    banner-mode: off
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:postgresql://10.0.14.25:5432/administration
+    username: postgres
+    password: postgres
+    hikari:
+      maxLifetime: 60000
+      maximum-pool-size: 20
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 10
+  jackson:
+    default-property-inclusion: always
+    date-format: yyyy-MM-dd
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  port: 8880
+  error:
+    include-message: always
+logging:
+  level:
+    org.springframework.web: ERROR
+  file:
+    name: /logs/application.log
+root-path: C:\\storage
+jwt:
+  refresh:
+    expiration: 10000
+  expiration: 5
+  secret: 676723b5fb3f2139556cc5dc8fc92fdeca12df57b7deab37c35c528f7b4608fc
+security:
+  role:
+    organization-administrator-id: 86
