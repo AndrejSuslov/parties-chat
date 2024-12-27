@@ -1,7 +1,7 @@
 package entity;
 
 import entity.metadata.ChatMessage_;
-import enums.MessageStatus;
+import enums.MessageType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ChatMessage {
 
     @Id
@@ -37,15 +39,15 @@ public class ChatMessage {
     @Column(name = ChatMessage_.ID)
     private Long id;
 
-    @Column(name = ChatMessage_.SENDER_ID)
-    private Long senderId;
+    @Column(name = ChatMessage_.SENDER)
+    private String sender;
 
     @Column(name = ChatMessage_.CONTENT)
     private String content;
 
-    @Column(name = ChatMessage_.STATUS)
+    @Column(name = ChatMessage_.TYPE)
     @Enumerated(EnumType.STRING)
-    private MessageStatus status;
+    private MessageType type;
 
     @JoinColumn(name = ChatMessage_.CHAT_ID)
     @ManyToOne(targetEntity = ChatEntity.class, fetch = FetchType.LAZY)
@@ -93,10 +95,10 @@ public class ChatMessage {
     public String toString() {
         return getClass().getSimpleName() + "(" +
                 "id = " + getId() + ", " +
-                "senderId = " + getSenderId() + ", " +
+                "sender = " + getSender() + ", " +
                 "content = " + getContent() + ", " +
-                "status = " + getStatus() + ", " +
-                "chatId = " + getChatEntity().getId() + ", " +
+                "chatEntity = " + getChatEntity() + ", " +
+                "type = " + getType() + ", " +
                 "createdAt = " + getCreatedAt() + ", " +
                 "updatedAt = " + getUpdatedAt() + ", " +
                 "deletedAt = " + getDeletedAt() + ")";

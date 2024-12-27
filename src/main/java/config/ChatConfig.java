@@ -20,7 +20,7 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/chatroom", "/user");
+        config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
         config.setUserDestinationPrefix("/user");
     }
@@ -30,6 +30,7 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("*")
                 .withSockJS();
+        registry.setPreserveReceiveOrder(true);
     }
 
     @Override

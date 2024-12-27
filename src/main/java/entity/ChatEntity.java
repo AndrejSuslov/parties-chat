@@ -1,11 +1,17 @@
 package entity;
 
 import entity.metadata.ChatEntity_;
+import entity.metadata.ChatMessage_;
+import enums.ChatType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +48,10 @@ public class ChatEntity {
             WHERE m2muc.chat_id = id
             """)
     private List<Long> userIds = new ArrayList<>();
+
+    @Column(name = ChatEntity_.TYPE)
+    @Enumerated(value = EnumType.STRING)
+    private ChatType type;
 
     @CreatedDate
     @Column(name = ChatEntity_.CREATED_AT, updatable = false)
