@@ -10,11 +10,11 @@ import java.util.List;
 @Repository
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
 
-    @Query("""
-            SELECT ch FROM ChatEntity ch
-                LEFT JOIN UserEntity u ON u.id IN ch.userIds
-            WHERE ch.deletedAt IS NULL 
-            ORDER BY ch.createdAt DESC
-            """)
+    @Query(value = """
+            SELECT ch FROM chats ch
+                LEFT JOIN m2m_users_chats m2muc ON :userId = m2muc.user_id
+            WHERE ch.deleted_at IS NULL
+            ORDER BY ch.created_at DESC
+           """, nativeQuery = true)
     List<ChatEntity> findAllByUserId(Long userId);
 }

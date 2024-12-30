@@ -27,13 +27,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public List<ChatMessageResponse> findAllByChatIdAndSender(Long chatId, String sender) {
-        final List<ChatMessage> all = repository.findAllByChatIdAndSender(chatId, sender);
+        final List<ChatMessage> all = repository.findAllByIdAndSender(chatId, sender);
         return mapper.toResponses(all);
     }
 
     @Override
     public List<ChatMessageResponse> findAllByChatId(Long chatId) {
-        List<ChatMessage> all = repository.findAllByChatId(chatId);
+        List<ChatMessage> all = repository.findAllById(chatId);
         return mapper.toResponses(all);
     }
 
