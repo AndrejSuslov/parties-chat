@@ -13,6 +13,8 @@ public class CreateChatRequest {
 
     private String name;
 
+    private String type;
+
     private List<Long> users;
 
 }
