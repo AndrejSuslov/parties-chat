@@ -62,14 +62,14 @@ public class ChatEntity {
     private ChatType type;
 
     @CreatedDate
-    @Column(name = ChatEntity_.CREATED_AT, updatable = false)
+    @Column(name = ChatEntity_.CREATED_AT, updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = ChatEntity_.UPDATED_AT, insertable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = ChatEntity_.DELETED_AT)
+    @Column(name = ChatEntity_.DELETED_AT, insertable = false)
     private LocalDateTime deletedAt;
 
     @Override
