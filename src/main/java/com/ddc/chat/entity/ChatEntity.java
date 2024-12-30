@@ -3,6 +3,7 @@ package com.ddc.chat.entity;
 import com.ddc.chat.entity.metadata.ChatEntity_;
 import com.ddc.chat.enums.ChatType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -53,6 +54,7 @@ public class ChatEntity {
             SELECT m2muc.user_id FROM m2m_users_chats m2muc
             WHERE m2muc.chat_id = id
             """)
+    @ElementCollection
     private List<Long> userIds = new ArrayList<>();
 
     @Column(name = ChatEntity_.TYPE)
