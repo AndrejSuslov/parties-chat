@@ -5,7 +5,7 @@ spring:
     banner-mode: off
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:postgresql://10.0.14.25:5432/administration
+    url: jdbc:postgresql://localhost:5432/chat
     username: postgres
     password: postgres
     hikari:

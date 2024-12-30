@@ -20,13 +20,6 @@ CREATE TABLE IF NOT EXISTS chat_messages
     deleted_at timestamp
 );
 
-CREATE TABLE IF NOT EXISTS chat_notifications
-(
-    id          BIGSERIAL PRIMARY KEY,
-    sender_id   BIGINT REFERENCES users (id),
-    sender_name text
-);
-
 CREATE TABLE IF NOT EXISTS m2m_users_chats
 (
     id      BIGSERIAL PRIMARY KEY,
