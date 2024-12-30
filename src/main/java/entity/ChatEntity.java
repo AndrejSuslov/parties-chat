@@ -1,7 +1,6 @@
 package entity;
 
 import entity.metadata.ChatEntity_;
-import entity.metadata.ChatMessage_;
 import enums.ChatType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,14 +9,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -33,6 +34,11 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
+@SQLRestriction(value = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE " + ChatEntity_.TABLE + " SET deleted_at = now() " +
+" WHERE id = ? AND deleted_at IS NULL")
 public class ChatEntity {
 
     @Id

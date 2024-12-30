@@ -1,50 +1,53 @@
 package controller;
 
-import entity.ChatMessage;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import controller.request.CreateChatRequest;
+import controller.request.UpdateChatRequest;
+import controller.response.ChatResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import service.ChatService;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/chat")
 public class ChatController {
 
-    private SimpMessagingTemplate template;
-    private ChatService chatService;
+    private final ChatService chatService;
 
-//    @MessageMapping({"/message"})
-//    @SendTo({"/chatroom/public"})
-//    public ChatMessage receiveMessage(ChatMessage message) {
-//        this.chatService.save(message);
-//        return message;
-//    }
-//
-//    @MessageMapping({"/private-message"})
-//    public void privateMessage(ChatMessage message) {
-//        Long receiver = message.getSenderId();
-//        this.template.convertAndSendToUser(receiver.toString(), "/private", message);
-//        this.chatService.save(message);
-//    }
-
-    @MessageMapping("/chat/sendMessage/{chatId}")
-    @SendTo("/topic/{chatId}")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage,
-                                   @PathVariable Long chatId) {
-        chatService.save(chatMessage);
-        return chatMessage;
+    @PostMapping
+    public ResponseEntity<Long> create(@RequestBody CreateChatRequest request) {
+        final Long id = chatService.create(request);
+        return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/{chatId}")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage,
-                               @PathVariable Long chatId,
-                               SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        return chatMessage;
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ChatResponse>> findAllByUserId(@PathVariable Long userId) {
+        final List<ChatResponse> all = chatService.findAllByUserId(userId);
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HttpStatus> update(@PathVariable Long id,
+                                       @RequestBody UpdateChatRequest request) {
+        chatService.update(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
+        chatService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

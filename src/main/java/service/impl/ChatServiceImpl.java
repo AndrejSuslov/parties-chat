@@ -5,6 +5,7 @@ import controller.request.UpdateChatRequest;
 import controller.response.ChatResponse;
 import entity.ChatEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import repository.ChatRepository;
 import service.ChatService;
@@ -23,6 +24,11 @@ public class ChatServiceImpl implements ChatService {
     public Long create(CreateChatRequest createChatRequest) {
         final ChatEntity entity = mapper.toEntity(createChatRequest);
         return repository.save(entity).getId();
+    }
+
+    @Override
+    public ChatEntity findById(Long id) {
+        return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Override
