@@ -1,7 +1,7 @@
 package com.ddc.chat.controller;
 
 import com.ddc.chat.controller.request.UpdateMessageRequest;
-import com.ddc.chat.controller.response.ChatMessageResponse;
+import com.ddc.chat.controller.response.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +24,15 @@ public class MessageController {
     private final ChatMessageService chatMessageService;
 
     @GetMapping("/{chatId}")
-    public ResponseEntity<List<ChatMessageResponse>> findAllByUserId(@PathVariable Long chatId) {
-        final List<ChatMessageResponse> all = chatMessageService.findAllByChatId(chatId);
+    public ResponseEntity<List<MessageResponse>> findAllByUserId(@PathVariable Long chatId) {
+        final List<MessageResponse> all = chatMessageService.findAllByChatId(chatId);
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
     @GetMapping("/{chatId}/{sender}")
-    public ResponseEntity<List<ChatMessageResponse>> findByUserId(@PathVariable Long chatId,
+    public ResponseEntity<List<MessageResponse>> findByUserId(@PathVariable Long chatId,
                                                                   @PathVariable String sender) {
-        final List<ChatMessageResponse> allByChatIdAndSender = chatMessageService.findAllByChatIdAndSender(chatId,
+        final List<MessageResponse> allByChatIdAndSender = chatMessageService.findAllByChatIdAndSender(chatId,
                                                                                                            sender);
         return new ResponseEntity<>(allByChatIdAndSender, HttpStatus.OK);
     }

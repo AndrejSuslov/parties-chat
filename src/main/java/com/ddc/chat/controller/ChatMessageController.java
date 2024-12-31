@@ -1,6 +1,6 @@
 package com.ddc.chat.controller;
 
-import com.ddc.chat.controller.request.CreateChatMessageRequest;
+import com.ddc.chat.controller.request.CreateMessageRequest;
 import com.ddc.chat.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -24,14 +24,14 @@ public class ChatMessageController {
 
     @MessageMapping("/chat/sendMessage/{chatId}")
     @SendTo("/topic/{chatId}")
-    public ChatMessage sendMessage(@Payload CreateChatMessageRequest chatMessage,
+    public ChatMessage sendMessage(@Payload CreateMessageRequest chatMessage,
                                    @PathVariable Long chatId) {
         return chatMessageService.create(chatMessage);
     }
 
     @MessageMapping("/chat/addUser")
     @SendTo("/topic/{chatId}")
-    public ChatMessage addUser(@Payload CreateChatMessageRequest chatMessage,
+    public ChatMessage addUser(@Payload CreateMessageRequest chatMessage,
                                @PathVariable Long chatId,
                                SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
@@ -40,7 +40,7 @@ public class ChatMessageController {
 
     @MessageMapping("/chat/deleteUser")
     @SendTo("/topic/{chatId}")
-    public ChatMessage deleteUser(@Payload CreateChatMessageRequest chatMessage,
+    public ChatMessage deleteUser(@Payload CreateMessageRequest chatMessage,
                                   @PathVariable Long chatId,
                                   SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.getSessionAttributes().remove(chatMessage.getSender());
