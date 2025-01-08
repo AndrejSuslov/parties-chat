@@ -5,46 +5,69 @@ import com.ddc.chat.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.stereotype.Controller;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.ddc.chat.service.ChatMessageService;
+import org.springframework.web.bind.annotation.RestController;
 
-/*todo: "http://localhost:8080/ws/chat/sendMessage/{chatId}" - сюда с фронта отправляются сообщения и попадают
-todo:  в проаннотированный метод sendMessage()
-todo: "http://localhost:8080/ws/topic/{chatId}" - сюда после бэкенда отправляются сообщения и попадают к юзерам,
-todo: кто подписан на канал "/topic/{chatId}" */
+/*
+Действие ---------------------------------------------------- URL
+Отправка сообщения ------------------------------------------ ws://localhost:8080/ws/chat/sendMessage/{chatId}
+Подписка на чат	--------------------------------------------- ws://localhost:8080/ws/topic/{chatId}
+Добавление пользователя	------------------------------------- ws://localhost:8080/ws/chat/addUser/{chatId}
+Удаление пользователя --------------------------------------- ws://localhost:8080/ws/chat/deleteUser/{chatId}
+todo: ко всему этому добавляются идентифиакторы от SockJS
+*/
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
+    private final SimpMessagingTemplate messagingTemplate;
 
+    // Отправка сообщения в чат
     @MessageMapping("/chat/sendMessage/{chatId}")
-    @SendTo("/topic/{chatId}")
-    public ChatMessage sendMessage(@Payload CreateMessageRequest chatMessage,
-                                   @PathVariable Long chatId) {
-        return chatMessageService.create(chatMessage);
+    public void sendMessage(@Payload CreateMessageRequest chatMessage,
+                            @PathVariable Long chatId) {
+        ChatMessage savedMessage = chatMessageService.create(chatMessage);
+
+        // Рассылаем сообщение всем подписчикам данного чата
+        messagingTemplate.convertAndSend("/topic/" + chatId, savedMessage);
     }
 
-    @MessageMapping("/chat/addUser")
-    @SendTo("/topic/{chatId}")
-    public ChatMessage addUser(@Payload CreateMessageRequest chatMessage,
-                               @PathVariable Long chatId,
-                               SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        return chatMessageService.create(chatMessage);
+    // Добавление пользователя в чат
+    @MessageMapping("/chat/addUser/{chatId}")
+    public void addUser(@Payload CreateMessageRequest request,
+                        @PathVariable Long chatId,
+                        SimpMessageHeaderAccessor headerAccessor) {
+        // Сохраняем пользователя в сессии
+        headerAccessor.getSessionAttributes().put("username", request.getSender());
+
+        // Уведомляем чат о новом участнике
+        String notification = "Пользователь " + request.getSender() + " добавлен в чат.";
+        messagingTemplate.convertAndSend("/topic/" + chatId, notification);
+
+        // Дополнительная логика (например, добавление в базу)
+        chatMessageService.create(request);
     }
 
-    @MessageMapping("/chat/deleteUser")
-    @SendTo("/topic/{chatId}")
-    public ChatMessage deleteUser(@Payload CreateMessageRequest chatMessage,
-                                  @PathVariable Long chatId,
-                                  SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().remove(chatMessage.getSender());
-        return chatMessageService.create(chatMessage);
+    // Удаление пользователя из чата
+    @MessageMapping("/chat/removeUser/{chatId}")
+    public void removeUser(@Payload CreateMessageRequest request,
+                           @PathVariable Long chatId,
+                           SimpMessageHeaderAccessor headerAccessor) {
+        // Удаляем пользователя из сессии
+        headerAccessor.getSessionAttributes().remove(request.getSender());
+
+        // Уведомляем чат об удалении участника
+        String notification = "Пользователь " + request.getSender() + " удалён из чата.";
+        messagingTemplate.convertAndSend("/topic/" + chatId, notification);
+
+        // Дополнительная логика (например, удаление из базы)
+        chatMessageService.create(request);
     }
 
 }
+
