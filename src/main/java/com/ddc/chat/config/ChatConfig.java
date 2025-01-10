@@ -22,14 +22,14 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
-        config.setUserDestinationPrefix("/user");
+//        config.setUserDestinationPrefix("/user"); если делать данные чисто для определеннго юзера
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*")
-                .withSockJS();
+                .setAllowedOrigins("*");
+                //.withSockJS();
         registry.setPreserveReceiveOrder(true);
     }
 

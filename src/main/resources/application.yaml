@@ -33,7 +33,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-  port: 8880
+  port: 8080
   error:
     include-message: always
 logging:
