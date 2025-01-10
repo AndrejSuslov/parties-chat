@@ -18,13 +18,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/message")
+@RequestMapping("/api/v1/messages")
 public class MessageController {
 
     private final ChatMessageService chatMessageService;
 
     @GetMapping("/{chatId}")
-    public ResponseEntity<List<MessageResponse>> findAllByUserId(@PathVariable Long chatId) {
+    public ResponseEntity<List<MessageResponse>> findAllByChatId(@PathVariable Long chatId) {
         final List<MessageResponse> all = chatMessageService.findAllByChatId(chatId);
         return new ResponseEntity<>(all, HttpStatus.OK);
     }

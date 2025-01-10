@@ -40,7 +40,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     @Override
     public Long update(Long chatId, UpdateMessageRequest updateMessageRequest) {
         final ChatMessage entity = mapper.toEntity(updateMessageRequest);
-        entity.getChatEntity().setId(chatId);
+        entity.getChat().setId(chatId);
         return repository.save(entity).getId();
     }
 

@@ -60,7 +60,7 @@ public class ChatMessage {
 
     @JoinColumn(name = ChatMessage_.CHAT_ID)
     @ManyToOne(targetEntity = ChatEntity.class, fetch = FetchType.LAZY)
-    private ChatEntity chatEntity;
+    private ChatEntity chat;
 
     @CreatedDate
     @Column(name = ChatMessage_.CREATED_AT, updatable = false)
@@ -106,7 +106,7 @@ public class ChatMessage {
                 "id = " + getId() + ", " +
                 "sender = " + getSender() + ", " +
                 "content = " + getContent() + ", " +
-                "chatEntity = " + getChatEntity() + ", " +
+                "chatEntity = " + getChat() + ", " +
                 "type = " + getType() + ", " +
                 "createdAt = " + getCreatedAt() + ", " +
                 "updatedAt = " + getUpdatedAt() + ", " +
