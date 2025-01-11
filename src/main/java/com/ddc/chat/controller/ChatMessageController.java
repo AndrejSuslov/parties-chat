@@ -28,45 +28,30 @@ public class ChatMessageController {
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    // Отправка сообщения в чат
     @MessageMapping("/chat/sendMessage/{chatId}")
     public void sendMessage(@Payload CreateMessageRequest chatMessage,
                             @DestinationVariable Long chatId) {
         ChatMessage savedMessage = chatMessageService.create(chatMessage, chatId);
-
-        // Рассылаем сообщение всем подписчикам данного чата
         messagingTemplate.convertAndSend("/topic/" + chatId, savedMessage);
     }
 
-    // Добавление пользователя в чат
     @MessageMapping("/chat/addUser/{chatId}")
     public void addUser(@Payload CreateMessageRequest request,
                         @DestinationVariable Long chatId,
                         SimpMessageHeaderAccessor headerAccessor) {
-        // Сохраняем пользователя в сессии
         headerAccessor.getSessionAttributes().put("username", request.getSender());
-
-        // Уведомляем чат о новом участнике
         String notification = "Пользователь " + request.getSender() + " добавлен в чат.";
         messagingTemplate.convertAndSend("/topic/" + chatId, notification);
-
-        // Дополнительная логика (например, добавление в базу)
         chatMessageService.create(request, chatId);
     }
 
-    // Удаление пользователя из чата
     @MessageMapping("/chat/removeUser/{chatId}")
     public void removeUser(@Payload CreateMessageRequest request,
                            @DestinationVariable Long chatId,
                            SimpMessageHeaderAccessor headerAccessor) {
-        // Удаляем пользователя из сессии
         headerAccessor.getSessionAttributes().remove(request.getSender());
-
-        // Уведомляем чат об удалении участника
         String notification = "Пользователь " + request.getSender() + " удалён из чата.";
         messagingTemplate.convertAndSend("/topic/" + chatId, notification);
-
-        // Дополнительная логика (например, удаление из базы)
         chatMessageService.create(request, chatId);
     }
 
