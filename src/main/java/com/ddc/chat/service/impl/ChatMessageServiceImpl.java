@@ -35,7 +35,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public List<MessageResponse> findAllByChatId(Long chatId) {
-        List<ChatMessage> all = repository.findAllById(chatId);
+        List<ChatMessage> all = repository.findAllByChatId(chatId);
         return mapper.toResponses(all);
     }
 

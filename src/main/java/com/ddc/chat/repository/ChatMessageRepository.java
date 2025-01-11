@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-    List<ChatMessage> findAllById (Long chatId);
+    List<ChatMessage> findAllByChatId (Long chatId);
 
     List<ChatMessage> findAllByIdAndSender (Long Id, String sender);
 

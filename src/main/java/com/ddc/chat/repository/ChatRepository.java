@@ -23,4 +23,5 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             ORDER BY ch.created_at DESC
            """, nativeQuery = true)
     List<ChatEntity> findAllByUserId(Long userId);
+
 }
