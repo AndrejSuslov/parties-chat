@@ -13,7 +13,7 @@ public class CreateMessageRequest {
 
     private String content;
 
-    private String chatId;
+    private Long chatId;
 
     private String type;
 
