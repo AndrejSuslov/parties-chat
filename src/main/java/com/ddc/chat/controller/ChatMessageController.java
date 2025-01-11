@@ -3,11 +3,11 @@ package com.ddc.chat.controller;
 import com.ddc.chat.controller.request.CreateMessageRequest;
 import com.ddc.chat.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.ddc.chat.service.ChatMessageService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +31,7 @@ public class ChatMessageController {
     // Отправка сообщения в чат
     @MessageMapping("/chat/sendMessage/{chatId}")
     public void sendMessage(@Payload CreateMessageRequest chatMessage,
-                            @PathVariable Long chatId) {
+                            @DestinationVariable Long chatId) {
         ChatMessage savedMessage = chatMessageService.create(chatMessage);
 
         // Рассылаем сообщение всем подписчикам данного чата
@@ -41,7 +41,7 @@ public class ChatMessageController {
     // Добавление пользователя в чат
     @MessageMapping("/chat/addUser/{chatId}")
     public void addUser(@Payload CreateMessageRequest request,
-                        @PathVariable Long chatId,
+                        @DestinationVariable Long chatId,
                         SimpMessageHeaderAccessor headerAccessor) {
         // Сохраняем пользователя в сессии
         headerAccessor.getSessionAttributes().put("username", request.getSender());
@@ -57,7 +57,7 @@ public class ChatMessageController {
     // Удаление пользователя из чата
     @MessageMapping("/chat/removeUser/{chatId}")
     public void removeUser(@Payload CreateMessageRequest request,
-                           @PathVariable Long chatId,
+                           @DestinationVariable Long chatId,
                            SimpMessageHeaderAccessor headerAccessor) {
         // Удаляем пользователя из сессии
         headerAccessor.getSessionAttributes().remove(request.getSender());
