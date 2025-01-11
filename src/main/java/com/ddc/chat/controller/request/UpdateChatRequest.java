@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateChatRequest {
 
-    private Long id;
-
     private String name;
 
 }

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 _________________________________________________________________________________________________________________
 Отправка сообщения      -------------------------------------   ws://localhost:8080/ws/app/chat/sendMessage/{chatId}
 Подписка на чат	        -------------------------------------   ws://localhost:8080/ws/topic/{chatId}
-Добавление пользователя	-------------------------------------   ws://localhost:8080/ws/app/chat/addUser/{chatId}
-Удаление пользователя   -------------------------------------   ws://localhost:8080/ws/app/chat/deleteUser/{chatId}
+Добавление пользователя	-------------------------------------   ws://localhost:8080/ws/app/chat/{chatId}/addUser
+Удаление пользователя   -------------------------------------   ws://localhost:8080/ws/app/chat/{chatId}/deleteUser
 todo: ко всему этому добавляются идентифиакторы от SockJS ???????????????
 todo: нужно подумать про идентификаторы от SockJS, т.к. они всегда разные и ломают смысл отправки сообщения в канал
 */
@@ -36,7 +36,7 @@ public class ChatMessageController {
         messagingTemplate.convertAndSend("/topic/" + chatId, savedMessage);
     }
 
-    @MessageMapping("/chat/addUser/{chatId}")
+    @MessageMapping("/chat/{chatId}/addUser")
     public void addUser(@Payload CreateMessageRequest request,
                         @DestinationVariable Long chatId,
                         SimpMessageHeaderAccessor headerAccessor) {
@@ -46,7 +46,7 @@ public class ChatMessageController {
         chatMessageService.create(request, chatId);
     }
 
-    @MessageMapping("/chat/removeUser/{chatId}")
+    @MessageMapping("/chat/{chatId}/removeUser")
     public void removeUser(@Payload CreateMessageRequest request,
                            @DestinationVariable Long chatId,
                            SimpMessageHeaderAccessor headerAccessor) {

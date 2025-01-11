@@ -5,6 +5,9 @@ import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.entity.ChatEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.ddc.chat.repository.ChatRepository;
 import com.ddc.chat.service.ChatService;
@@ -16,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
+    //todo: проедлать все такие операци, когда юзер находит что-то по чем-то (сообщения, приватные чаты, чаты оп
+    // имени, чаты по id и так далее)
     private final ChatRepository repository;
     private final ChatMapper mapper;
 
@@ -26,8 +31,19 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(RuntimeException::new);
+    public ChatResponse findById(Long id) {
+        final ChatEntity chat = repository.findById(id).orElseThrow(RuntimeException::new);
+        final List<Long> allUserIds = repository.findAllUserIdsByIdOrName(id, "");
+        chat.setUserIds(allUserIds);
+        return mapper.toResponse(chat);
+    }
+
+    @Override
+    public ChatResponse findByName(String name) {
+        ChatEntity chat = repository.findByName(name);
+        final List<Long> allUserIds = repository.findAllUserIdsByIdOrName(0L, name);
+        chat.setUserIds(allUserIds);
+        return mapper.toResponse(chat);
     }
 
     @Override
@@ -37,14 +53,15 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<ChatResponse> findAll() {
-        final List<ChatEntity> all = repository.findAll();
-        return mapper.toResponses(all);
+    public Page<ChatResponse> findAll(Sort sort, Pageable pageable) {
+        final Page<ChatEntity> all = repository.findAll(sort, pageable);
+        return all.map(mapper::toResponse);
     }
 
     @Override
-    public Long update(UpdateChatRequest updateChatRequest) {
+    public Long update(UpdateChatRequest updateChatRequest, Long id) {
         final ChatEntity entity = mapper.toEntity(updateChatRequest);
+        entity.setId(id);
         return repository.save(entity).getId();
     }
 

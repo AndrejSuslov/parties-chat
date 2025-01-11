@@ -1,6 +1,9 @@
 package com.ddc.chat.repository;
 
 import com.ddc.chat.entity.ChatEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,4 +27,14 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
            """, nativeQuery = true)
     List<ChatEntity> findAllByUserId(Long userId);
 
+    Page<ChatEntity> findAll(Sort sort, Pageable pageable);
+
+    ChatEntity findByName(String name);
+
+    @Query(value = """
+            SELECT m2muc.user_id FROM m2m_users_chats m2muc
+                LEFT JOIN chats ch ON m2muc.chat_id = ch.id
+            WHERE m2muc.chat_id = :chatId OR ch.name = :name
+            """, nativeQuery = true)
+    List<Long> findAllUserIdsByIdOrName(Long chatId, String name);
 }
