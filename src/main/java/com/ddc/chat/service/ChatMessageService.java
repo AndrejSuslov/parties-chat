@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ChatMessageService {
 
-    ChatMessage create(CreateMessageRequest createChatMessageRequest);
+    ChatMessage create(CreateMessageRequest createChatMessageRequest, Long chatId);
 
     List<MessageResponse> findAllByChatId(Long chatId);
 

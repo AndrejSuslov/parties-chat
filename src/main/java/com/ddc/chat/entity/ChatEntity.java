@@ -72,6 +72,10 @@ public class ChatEntity {
     @Column(name = ChatEntity_.DELETED_AT, insertable = false)
     private LocalDateTime deletedAt;
 
+    public ChatEntity(Long id){
+        this.id = id;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) {

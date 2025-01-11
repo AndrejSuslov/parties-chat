@@ -32,7 +32,7 @@ public class ChatMessageController {
     @MessageMapping("/chat/sendMessage/{chatId}")
     public void sendMessage(@Payload CreateMessageRequest chatMessage,
                             @DestinationVariable Long chatId) {
-        ChatMessage savedMessage = chatMessageService.create(chatMessage);
+        ChatMessage savedMessage = chatMessageService.create(chatMessage, chatId);
 
         // Рассылаем сообщение всем подписчикам данного чата
         messagingTemplate.convertAndSend("/topic/" + chatId, savedMessage);
@@ -51,7 +51,7 @@ public class ChatMessageController {
         messagingTemplate.convertAndSend("/topic/" + chatId, notification);
 
         // Дополнительная логика (например, добавление в базу)
-        chatMessageService.create(request);
+        chatMessageService.create(request, chatId);
     }
 
     // Удаление пользователя из чата
@@ -67,7 +67,7 @@ public class ChatMessageController {
         messagingTemplate.convertAndSend("/topic/" + chatId, notification);
 
         // Дополнительная логика (например, удаление из базы)
-        chatMessageService.create(request);
+        chatMessageService.create(request, chatId);
     }
 
 }

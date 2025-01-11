@@ -3,6 +3,7 @@ package com.ddc.chat.service.impl;
 import com.ddc.chat.controller.request.CreateMessageRequest;
 import com.ddc.chat.controller.request.UpdateMessageRequest;
 import com.ddc.chat.controller.response.MessageResponse;
+import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatMessageMapper mapper;
 
     @Override
-    public ChatMessage create (CreateMessageRequest request) {
+    public ChatMessage create (CreateMessageRequest request, Long chatId) {
         final ChatMessage entity = mapper.toEntity(request);
+        entity.setChat(new ChatEntity(chatId));
         return repository.save(entity);
     }
 
