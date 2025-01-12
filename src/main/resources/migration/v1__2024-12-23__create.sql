@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS chat_messages
 (
     id         BIGSERIAL PRIMARY KEY,
     chat_id    BIGINT REFERENCES chats (id),
-    sender_id  BIGINT REFERENCES users (id),
+    sender     text CHECK ( length(sender) <= 50),
     content    text,
     status     text CHECK ( length(status) <= 20 ),
     created_at timestamp default now(),
