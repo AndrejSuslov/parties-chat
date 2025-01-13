@@ -80,6 +80,7 @@ public class ChatServiceImpl implements ChatService {
         final List<Long> chatIds = chats.stream()
                 .map(ChatEntity::getId)
                 .toList();
+        repository.findAllUserIdsById(chatIds);
 //todo: something there
         return chats;
     }

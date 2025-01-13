@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,13 +52,14 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
     ChatEntity findByName(String name);
 
     @Query(value = """
-            SELECT ch.id, array_agg(m2muc.user_id) FROM m2m_users_chats m2muc
+            SELECT ch.id as chat_id, array_agg(m2muc.user_id) as user_ids FROM m2m_users_chats m2muc
                 LEFT JOIN chats ch ON ch.id = m2muc.chat_id
             WHERE m2muc.chat_id IN (:chatId)
             AND ch.deleted_at IS NULL
             GROUP BY ch.id;
             """, nativeQuery = true)
-    //todo: think about this query and assembling data in service, rework it overall
+    //todo: think about this query and assembling data in service, rework it ov
     Map<Long, List<Long>> findAllUserIdsById(List<Long> chatId);
+
 
 }
