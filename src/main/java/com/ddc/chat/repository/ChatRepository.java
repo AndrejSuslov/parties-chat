@@ -27,7 +27,7 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
            """, nativeQuery = true)
     List<ChatEntity> findAllByUserId(Long userId);
 
-    Page<ChatEntity> findAll(Sort sort, Pageable pageable);
+    Page<ChatEntity> findAll(Pageable pageable, Sort sort);
 
     ChatEntity findByName(String name);
 

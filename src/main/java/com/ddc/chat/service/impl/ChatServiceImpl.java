@@ -53,8 +53,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Page<ChatResponse> findAll(Sort sort, Pageable pageable) {
-        final Page<ChatEntity> all = repository.findAll(sort, pageable);
+    public Page<ChatResponse> findAll(Pageable pageable, Sort sort) {
+        final Page<ChatEntity> all = repository.findAll(pageable, sort);
         return all.map(mapper::toResponse);
     }
 

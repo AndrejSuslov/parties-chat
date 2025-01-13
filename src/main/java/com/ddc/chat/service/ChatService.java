@@ -3,7 +3,6 @@ package com.ddc.chat.service;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.controller.request.CreateChatRequest;
-import com.ddc.chat.entity.ChatEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,7 +19,7 @@ public interface ChatService {
 
     List<ChatResponse> findAllByUserId(Long userId);
 
-    Page<ChatResponse> findAll(Sort sort, Pageable pageable);
+    Page<ChatResponse> findAll(Pageable pageable, Sort sort);
 
     Long update(UpdateChatRequest updateChatRequest, Long id);
 

@@ -56,8 +56,8 @@ public class ChatController {
     }
 
     @GetMapping
-    public ResponseEntity<Pagination<ChatResponse>> findAll(Sort sort, Pageable pageable) {
-        final Page<ChatResponse> all = chatService.findAll(sort, pageable);
+    public ResponseEntity<Pagination<ChatResponse>> findAll(Pageable pageable, Sort sort) {
+        final Page<ChatResponse> all = chatService.findAll(pageable, sort);
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
     }
 
