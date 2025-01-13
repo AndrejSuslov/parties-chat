@@ -3,6 +3,7 @@ package com.ddc.chat.controller;
 import com.ddc.chat.controller.request.CreateChatRequest;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
+import com.ddc.chat.enums.ChatType;
 import com.ddc.chat.util.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,13 +49,13 @@ public class ChatController {
 
     @GetMapping("/search/byUserId/private/{userId}")
     public ResponseEntity<List<ChatResponse>> findAllPrivateByUserId(@PathVariable("userId") Long userId) {
-        final List<ChatResponse> all = chatService.findAllPrivateByUserId(userId);
+        final List<ChatResponse> all = chatService.findAllByUserIdAndType(userId, ChatType.PRIVATE);
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
     @GetMapping("/search/byUserId/public/{userId}")
     public ResponseEntity<List<ChatResponse>> findAllPublicByUserId(@PathVariable("userId") Long userId) {
-        final List<ChatResponse> all = chatService.findAllPublicByUserId(userId);
+        final List<ChatResponse> all = chatService.findAllByUserIdAndType(userId, ChatType.PUBLIC);
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 

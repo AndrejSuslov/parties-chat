@@ -3,6 +3,7 @@ package com.ddc.chat.service;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.controller.request.CreateChatRequest;
+import com.ddc.chat.enums.ChatType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,9 +19,7 @@ public interface ChatService {
 
     List<ChatResponse> findAllByUserId(Long userId);
 
-    List<ChatResponse> findAllPrivateByUserId(Long userId);
-
-    List<ChatResponse> findAllPublicByUserId(Long userId);
+    List<ChatResponse> findAllByUserIdAndType(Long userId, ChatType type);
 
     Page<ChatResponse> findAll(Pageable pageable);
 

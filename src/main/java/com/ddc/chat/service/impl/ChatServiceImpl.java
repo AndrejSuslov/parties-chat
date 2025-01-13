@@ -5,8 +5,11 @@ import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.enums.ChatType;
+import com.ddc.chat.repository.JdbcChatRepository;
+import com.ddc.chat.util.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.ddc.chat.repository.ChatRepository;
@@ -14,14 +17,14 @@ import com.ddc.chat.service.ChatService;
 import com.ddc.chat.service.mapper.ChatMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
-    //todo: проедлать все такие операци, когда юзер находит что-то по чем-то (сообщения, приватные чаты, чаты оп
-    // имени, чаты по id и так далее)
     private final ChatRepository repository;
+    private final JdbcChatRepository jdbcRepository;
     private final ChatMapper mapper;
 
     @Override
@@ -33,61 +36,37 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatResponse findById(Long id) {
         final ChatEntity chat = repository.findById(id).orElseThrow(RuntimeException::new);
-        final List<Long> allUserIds = repository.findAllUserIdsByIdOrName(id, "");
-        chat.setUserIds(allUserIds);
+        final List<UserDto> users = jdbcRepository.findUsers(List.of(id));
+        chat.setUserIds(users.get(0).getUsers(id));
         return mapper.toResponse(chat);
     }
 
     @Override
     public ChatResponse findByName(String name) {
         ChatEntity chat = repository.findByName(name);
-        final List<Long> allUserIds = repository.findAllUserIdsByIdOrName(0L, name);
-        chat.setUserIds(allUserIds);
+        //todo: сделать поиск юзеров по имени
         return mapper.toResponse(chat);
     }
 
     @Override
     public List<ChatResponse> findAllByUserId(Long userId) {
         final List<ChatEntity> allByUserId = repository.findAllByUserId(userId);
-        allByUserId
-                .forEach(chat -> {
-                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
-                    chat.setUserIds(allUserIdsByIdOrName);
-                });
-        return mapper.toResponses(allByUserId);
+        final List<ChatEntity> withUsers = setUserIds(allByUserId);
+        return mapper.toResponses(withUsers);
     }
 
     @Override
-    public List<ChatResponse> findAllPrivateByUserId(Long userId) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PRIVATE.toString());
-        allByUserId
-                .forEach(chat -> {
-                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
-                    chat.setUserIds(allUserIdsByIdOrName);
-                });
-        return mapper.toResponses(allByUserId);
-    }
-
-    @Override
-    public List<ChatResponse> findAllPublicByUserId(Long userId) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PUBLIC.toString());
-        allByUserId
-                .forEach(chat -> {
-                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
-                    chat.setUserIds(allUserIdsByIdOrName);
-                });
-        return mapper.toResponses(allByUserId);
+    public List<ChatResponse> findAllByUserIdAndType(Long userId, ChatType type) {
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, type.toString());
+        final List<ChatEntity> withUsers = setUserIds(allByUserId);
+        return mapper.toResponses(withUsers);
     }
 
     @Override
     public Page<ChatResponse> findAll(Pageable pageable) {
         final Page<ChatEntity> all = repository.findAll(pageable);
-        all
-                .forEach(chat -> {
-                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
-                    chat.setUserIds(allUserIdsByIdOrName);
-                });
-        return all.map(mapper::toResponse);
+        final List<ChatEntity> withUsers = setUserIds(all.stream().toList());
+        return new PageImpl<>(withUsers).map(mapper::toResponse);
     }
 
     @Override
@@ -100,6 +79,19 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void delete(Long chatId) {
         repository.deleteById(chatId);
+    }
+
+    private List<ChatEntity> setUserIds(List<ChatEntity> chats) {
+        final List<Long> chatIds = chats.stream()
+                .map(ChatEntity::getId)
+                .toList();
+        final List<UserDto> users = jdbcRepository.findUsers(chatIds);
+        chats.forEach(chat -> {
+            users.forEach(user -> {
+                chat.setUserIds(user.getUsers(chat.getId()));
+            });
+        });
+        return chats;
     }
 
 }

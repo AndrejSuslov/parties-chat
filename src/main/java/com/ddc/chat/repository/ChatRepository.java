@@ -2,6 +2,8 @@ package com.ddc.chat.repository;
 
 import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.enums.ChatType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Repository
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
@@ -46,12 +51,13 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
     ChatEntity findByName(String name);
 
     @Query(value = """
-            SELECT DISTINCT m2muc.user_id FROM m2m_users_chats m2muc
+            SELECT ch.id, array_agg(m2muc.user_id) FROM m2m_users_chats m2muc
                 LEFT JOIN chats ch ON ch.id = m2muc.chat_id
-            WHERE m2muc.chat_id = :chatId
-            OR ch.name = :name
+            WHERE m2muc.chat_id IN (:chatId)
             AND ch.deleted_at IS NULL
+            GROUP BY ch.id;
             """, nativeQuery = true)
-    List<Long> findAllUserIdsByIdOrName(Long chatId, String name);
+    //todo: think about this query and assembling data in service, rework it overall
+    Map<Long, List<Long>> findAllUserIdsById(List<Long> chatId);
 
 }
