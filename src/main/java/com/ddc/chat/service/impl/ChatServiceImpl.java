@@ -4,10 +4,10 @@ import com.ddc.chat.controller.request.CreateChatRequest;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.entity.ChatEntity;
+import com.ddc.chat.enums.ChatType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.ddc.chat.repository.ChatRepository;
 import com.ddc.chat.service.ChatService;
@@ -53,8 +53,20 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Page<ChatResponse> findAll(Pageable pageable, Sort sort) {
-        final Page<ChatEntity> all = repository.findAll(pageable, sort);
+    public List<ChatResponse> findAllPrivateByUserId(Long userId) {
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PRIVATE);
+        return mapper.toResponses(allByUserId);
+    }
+
+    @Override
+    public List<ChatResponse> findAllPublicByUserId(Long userId) {
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PUBLIC);
+        return mapper.toResponses(allByUserId);
+    }
+
+    @Override
+    public Page<ChatResponse> findAll(Pageable pageable) {
+        final Page<ChatEntity> all = repository.findAll(pageable);
         return all.map(mapper::toResponse);
     }
 

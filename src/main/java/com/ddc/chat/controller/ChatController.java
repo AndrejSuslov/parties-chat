@@ -3,12 +3,10 @@ package com.ddc.chat.controller;
 import com.ddc.chat.controller.request.CreateChatRequest;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
-import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.util.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ddc.chat.service.ChatService;
 
@@ -43,6 +40,24 @@ public class ChatController {
         return new ResponseEntity<>(chatResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/search/byUserId/{userId}")
+    public ResponseEntity<List<ChatResponse>> findAllByUserId(@PathVariable("userId") Long userId) {
+        final List<ChatResponse> all = chatService.findAllByUserId(userId);
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/byUserId/private/{userId}")
+    public ResponseEntity<List<ChatResponse>> findAllPrivateByUserId(@PathVariable("userId") Long userId) {
+        final List<ChatResponse> all = chatService.findAllPrivateByUserId(userId);
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/byUserId/public/{userId}")
+    public ResponseEntity<List<ChatResponse>> findAllPublicByUserId(@PathVariable("userId") Long userId) {
+        final List<ChatResponse> all = chatService.findAllPublicByUserId(userId);
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ChatResponse> findById(@PathVariable Long id) {
         final ChatResponse chat = chatService.findById(id);
@@ -50,14 +65,8 @@ public class ChatController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ChatResponse>> findAllByUserId(@RequestParam("userId") Long userId) {
-        final List<ChatResponse> all = chatService.findAllByUserId(userId);
-        return new ResponseEntity<>(all, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<Pagination<ChatResponse>> findAll(Pageable pageable, Sort sort) {
-        final Page<ChatResponse> all = chatService.findAll(pageable, sort);
+    public ResponseEntity<Pagination<ChatResponse>> findAll(Pageable pageable) {
+        final Page<ChatResponse> all = chatService.findAll(pageable);
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
     }
 
