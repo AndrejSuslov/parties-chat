@@ -15,6 +15,6 @@ public class CreateChatRequest {
 
     private String type;
 
-    private List<Long> users;
+    private List<Long> userIds;
 
 }

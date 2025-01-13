@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.proxy.HibernateProxy;
@@ -50,10 +49,10 @@ public class ChatEntity {
     @Column(name = ChatEntity_.NAME)
     private String name;
 
-    @Formula("""
-            SELECT m2muc.user_id FROM m2m_users_chats m2muc
-            WHERE m2muc.chat_id = id
-            """)
+//    @Formula("""
+//            SELECT m2muc.user_id FROM m2m_users_chats m2muc
+//            WHERE m2muc.chat_id = id
+//            """)
     @ElementCollection
     private List<Long> userIds = new ArrayList<>();
 
@@ -111,6 +110,7 @@ public class ChatEntity {
                 "userIds = " + getUserIds() + ", " +
                 "createdAt = " + getCreatedAt() + ", " +
                 "updatedAt = " + getUpdatedAt() + ", " +
+                "userIds = " + getUserIds() + ", " +
                 "deletedAt = " + getDeletedAt() + ")";
     }
 

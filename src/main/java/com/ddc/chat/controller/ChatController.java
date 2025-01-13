@@ -37,7 +37,7 @@ public class ChatController {
     @GetMapping("/search/byName/{name}")
     public ResponseEntity<ChatResponse> findByName(@PathVariable String name) {
         final ChatResponse chatResponse = chatService.findByName(name);
-        return new ResponseEntity<>(chatResponse, HttpStatus.OK);
+        return new ResponseEntity<>(chatResponse, HttpStatus.OK); //todo: check users
     }
 
     @GetMapping("/search/byUserId/{userId}")

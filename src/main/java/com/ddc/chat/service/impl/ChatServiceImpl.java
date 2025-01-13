@@ -49,24 +49,44 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<ChatResponse> findAllByUserId(Long userId) {
         final List<ChatEntity> allByUserId = repository.findAllByUserId(userId);
+        allByUserId
+                .forEach(chat -> {
+                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
+                    chat.setUserIds(allUserIdsByIdOrName);
+                });
         return mapper.toResponses(allByUserId);
     }
 
     @Override
     public List<ChatResponse> findAllPrivateByUserId(Long userId) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PRIVATE);
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PRIVATE.toString());
+        allByUserId
+                .forEach(chat -> {
+                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
+                    chat.setUserIds(allUserIdsByIdOrName);
+                });
         return mapper.toResponses(allByUserId);
     }
 
     @Override
     public List<ChatResponse> findAllPublicByUserId(Long userId) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PUBLIC);
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, ChatType.PUBLIC.toString());
+        allByUserId
+                .forEach(chat -> {
+                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
+                    chat.setUserIds(allUserIdsByIdOrName);
+                });
         return mapper.toResponses(allByUserId);
     }
 
     @Override
     public Page<ChatResponse> findAll(Pageable pageable) {
         final Page<ChatEntity> all = repository.findAll(pageable);
+        all
+                .forEach(chat -> {
+                    final List<Long> allUserIdsByIdOrName = repository.findAllUserIdsByIdOrName(chat.getId(), "");
+                    chat.setUserIds(allUserIdsByIdOrName);
+                });
         return all.map(mapper::toResponse);
     }
 

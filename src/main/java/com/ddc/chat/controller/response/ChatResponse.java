@@ -15,6 +15,6 @@ public class ChatResponse {
 
     private String name;
 
-    private List<Long> users;
+    private List<Long> userIds;
 
 }
