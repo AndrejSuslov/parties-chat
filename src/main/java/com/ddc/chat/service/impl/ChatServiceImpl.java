@@ -5,7 +5,7 @@ import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.enums.ChatType;
-import com.ddc.chat.repository.JdbcRepository;
+import com.ddc.chat.repository.JdbcChatRepository;
 import com.ddc.chat.util.UserIdDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository repository;
     private final ChatMapper mapper;
-    private final JdbcRepository jdbcRepository;
+    private final JdbcChatRepository jdbcRepository;
 
     @Override
     public Long create(CreateChatRequest createChatRequest) {
