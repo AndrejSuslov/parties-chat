@@ -5,20 +5,20 @@ import com.ddc.chat.controller.request.UpdateMessageRequest;
 import com.ddc.chat.controller.response.MessageResponse;
 import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.entity.ChatMessage;
+import com.ddc.chat.repository.MessageRepository;
+import com.ddc.chat.service.mapper.MessageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.ddc.chat.repository.ChatMessageRepository;
-import com.ddc.chat.service.ChatMessageService;
-import com.ddc.chat.service.mapper.ChatMessageMapper;
+import com.ddc.chat.service.MessageService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChatMessageServiceImpl implements ChatMessageService {
+public class MessageServiceImpl implements MessageService {
 
-    private final ChatMessageRepository repository;
-    private final ChatMessageMapper mapper;
+    private final MessageRepository repository;
+    private final MessageMapper mapper;
 
     @Override
     public ChatMessage create (CreateMessageRequest request, Long chatId) {

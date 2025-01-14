@@ -7,7 +7,7 @@ import com.ddc.chat.entity.ChatMessage;
 
 import java.util.List;
 
-public interface ChatMessageService {
+public interface MessageService {
 
     ChatMessage create(CreateMessageRequest createChatMessageRequest, Long chatId);
 

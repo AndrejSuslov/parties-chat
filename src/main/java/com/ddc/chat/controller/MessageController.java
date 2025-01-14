@@ -2,6 +2,7 @@ package com.ddc.chat.controller;
 
 import com.ddc.chat.controller.request.UpdateMessageRequest;
 import com.ddc.chat.controller.response.MessageResponse;
+import com.ddc.chat.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.ddc.chat.service.ChatMessageService;
 
 import java.util.List;
 
@@ -21,18 +21,18 @@ import java.util.List;
 @RequestMapping("/api/v1/messages")
 public class MessageController {
 
-    private final ChatMessageService chatMessageService;
+    private final MessageService messageService;
 
     @GetMapping("/{chatId}")
     public ResponseEntity<List<MessageResponse>> findAllByChatId(@PathVariable Long chatId) {
-        final List<MessageResponse> all = chatMessageService.findAllByChatId(chatId);
+        final List<MessageResponse> all = messageService.findAllByChatId(chatId);
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
     @GetMapping("/{chatId}/{sender}")
     public ResponseEntity<List<MessageResponse>> findByUserId(@PathVariable Long chatId,
                                                                   @PathVariable String sender) {
-        final List<MessageResponse> allByChatIdAndSender = chatMessageService.findAllByChatIdAndSender(chatId,
+        final List<MessageResponse> allByChatIdAndSender = messageService.findAllByChatIdAndSender(chatId,
                                                                                                            sender);
         return new ResponseEntity<>(allByChatIdAndSender, HttpStatus.OK);
     }
@@ -40,13 +40,13 @@ public class MessageController {
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable Long id,
                                              @RequestBody UpdateMessageRequest request) {
-        chatMessageService.update(id, request);
+        messageService.update(id, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
-        chatMessageService.delete(id);
+        messageService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

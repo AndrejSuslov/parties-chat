@@ -14,7 +14,7 @@ import org.mapstruct.Named;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.FIELD)
-public interface ChatMessageMapper {
+public interface MessageMapper {
 
     @Mapping(target = "chat", source = "chatId", qualifiedByName = "mapChatIdToChat")
     ChatMessage toEntity(CreateMessageRequest request);
