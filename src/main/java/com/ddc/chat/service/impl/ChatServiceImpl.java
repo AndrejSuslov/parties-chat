@@ -16,6 +16,7 @@ import com.ddc.chat.repository.ChatRepository;
 import com.ddc.chat.service.ChatService;
 import com.ddc.chat.service.mapper.ChatMapper;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +38,15 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatResponse findById(Long id) {
         final ChatEntity chat = repository.findById(id).orElseThrow(RuntimeException::new);
-        //todo: something there
-        return mapper.toResponse(chat);
+        List<ChatEntity> chatEntity = setUserIds(Collections.singletonList(chat));
+        return mapper.toResponse(chatEntity.get(0));
     }
 
     @Override
     public ChatResponse findByName(String name) {
         ChatEntity chat = repository.findByName(name);
-        //todo: сделать поиск юзеров по имени
+        List<Long> userIdsByName = repository.findUserIdsByName(name);
+        chat.setUserIds(userIdsByName);
         return mapper.toResponse(chat);
     }
 

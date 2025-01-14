@@ -44,4 +44,12 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
 
     ChatEntity findByName(String name);
 
+    @Query(value = """
+            SELECT m2muc.user_id FROM m2m_users_chats m2muc
+                LEFT JOIN chats ch ON ch.name = :name
+            WHERE ch.deleted_at IS NULL
+            AND ch.id = m2muc.chat_id
+            """, nativeQuery = true)
+    List<Long> findUserIdsByName(String name);
+
 }
