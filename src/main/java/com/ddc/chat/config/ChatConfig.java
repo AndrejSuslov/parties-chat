@@ -2,6 +2,7 @@ package com.ddc.chat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.messaging.converter.DefaultContentTypeResolver;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@EnableJpaRepositories("com.ddc.chat.repository")
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override

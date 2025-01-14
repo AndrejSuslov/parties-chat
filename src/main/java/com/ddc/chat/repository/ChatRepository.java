@@ -1,20 +1,14 @@
 package com.ddc.chat.repository;
 
 import com.ddc.chat.entity.ChatEntity;
-import com.ddc.chat.enums.ChatType;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Tuple;
+import com.ddc.chat.util.UserIdDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Repository
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
@@ -58,8 +52,6 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             AND ch.deleted_at IS NULL
             GROUP BY ch.id;
             """, nativeQuery = true)
-    //todo: think about this query and assembling data in service, rework it ov
-    Map<Long, List<Long>> findAllUserIdsById(List<Long> chatId);
-
+    List<UserIdDto> findAllUserIdsById(List<Long> chatId);
 
 }

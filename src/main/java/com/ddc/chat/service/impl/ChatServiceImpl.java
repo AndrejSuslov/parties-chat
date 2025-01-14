@@ -5,6 +5,8 @@ import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.entity.ChatEntity;
 import com.ddc.chat.enums.ChatType;
+import com.ddc.chat.repository.JdbcRepository;
+import com.ddc.chat.util.UserIdDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,7 +16,9 @@ import com.ddc.chat.repository.ChatRepository;
 import com.ddc.chat.service.ChatService;
 import com.ddc.chat.service.mapper.ChatMapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository repository;
     private final ChatMapper mapper;
+    private final JdbcRepository jdbcRepository;
 
     @Override
     public Long create(CreateChatRequest createChatRequest) {
@@ -80,8 +85,12 @@ public class ChatServiceImpl implements ChatService {
         final List<Long> chatIds = chats.stream()
                 .map(ChatEntity::getId)
                 .toList();
-        repository.findAllUserIdsById(chatIds);
-//todo: something there
+        List<UserIdDto> userIdDtos = jdbcRepository.findUserIds(chatIds);
+        Map<Long, List<Long>> map = new HashMap<>();
+        userIdDtos.forEach(dto -> map.put(dto.getChatId(), dto.getUserIds()));
+        chats.forEach(chat -> {
+            chat.setUserIds(map.get(chat.getId()));
+        });
         return chats;
     }
 
