@@ -16,10 +16,7 @@ import com.ddc.chat.repository.ChatRepository;
 import com.ddc.chat.service.ChatService;
 import com.ddc.chat.service.mapper.ChatMapper;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +28,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Long create(CreateChatRequest createChatRequest) {
+        if(Objects.equals(createChatRequest.getType(), "PRIVATE") && createChatRequest.getUserIds().size() > 2) {
+            throw new RuntimeException("In private chat cannot be more than 2 users");
+        }
         final ChatEntity entity = mapper.toEntity(createChatRequest);
         return repository.save(entity).getId();
     }
