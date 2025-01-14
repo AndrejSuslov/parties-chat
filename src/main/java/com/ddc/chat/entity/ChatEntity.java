@@ -2,15 +2,7 @@ package com.ddc.chat.entity;
 
 import com.ddc.chat.entity.metadata.ChatEntity_;
 import com.ddc.chat.enums.ChatType;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,10 +41,6 @@ public class ChatEntity {
     @Column(name = ChatEntity_.NAME)
     private String name;
 
-//    @Formula("""
-//            SELECT m2muc.user_id FROM m2m_users_chats m2muc
-//            WHERE m2muc.chat_id = id
-//            """)
     @ElementCollection
     private List<Long> userIds = new ArrayList<>();
 
@@ -107,7 +95,6 @@ public class ChatEntity {
         return getClass().getSimpleName() + "(" +
                 "id = " + getId() + ", " +
                 "name = " + getName() + ", " +
-                "userIds = " + getUserIds() + ", " +
                 "createdAt = " + getCreatedAt() + ", " +
                 "updatedAt = " + getUpdatedAt() + ", " +
                 "userIds = " + getUserIds() + ", " +
