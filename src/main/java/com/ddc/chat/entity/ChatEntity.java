@@ -41,8 +41,8 @@ public class ChatEntity {
     @Column(name = ChatEntity_.NAME)
     private String name;
 
-    @ElementCollection
-    private List<Long> userIds = new ArrayList<>();
+//    @ElementCollection
+//    private List<Long> userIds = new ArrayList<>();
 
     @Column(name = ChatEntity_.TYPE)
     @Enumerated(value = EnumType.STRING)
@@ -97,7 +97,7 @@ public class ChatEntity {
                 "name = " + getName() + ", " +
                 "createdAt = " + getCreatedAt() + ", " +
                 "updatedAt = " + getUpdatedAt() + ", " +
-                "userIds = " + getUserIds() + ", " +
+                //"userIds = " + getUserIds() + ", " +
                 "deletedAt = " + getDeletedAt() + ")";
     }
 
