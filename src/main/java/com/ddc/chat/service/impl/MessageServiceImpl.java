@@ -37,8 +37,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Page<MessageResponse> findAllByChatIdAndDate(Long chatId, String date, Pageable pageable) {
-        final LocalDate dateTime = LocalDate.parse(date);
-        final Page<ChatMessage> all = repository.findAllByChatIdAndDate(chatId, dateTime, pageable);
+        final LocalDate localDate = LocalDate.parse(date);
+        final Page<ChatMessage> all = repository.findAllByChatIdAndDate(chatId, localDate, pageable);
         return all.map(mapper::toResponse);
     }
 
