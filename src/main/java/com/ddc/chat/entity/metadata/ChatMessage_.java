@@ -14,7 +14,8 @@ final public class ChatMessage_ {
     public final static String SENDER = "sender";
     public final static String CONTENT = "content";
     public final static String TYPE = "type";
-    public final static String CREATED_AT = "created_at";
+    public final static String DATE = "date";
+    public final static String TIME = "time";
     public final static String UPDATED_AT = "updated_at";
     public final static String DELETED_AT = "deleted_at";
 

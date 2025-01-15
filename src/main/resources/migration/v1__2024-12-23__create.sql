@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS chat_messages
     sender     text CHECK ( length(sender) <= 50),
     content    text,
     status     text CHECK ( length(status) <= 20 ),
-    created_at timestamp default now(),
+    date       date default now(),
+    time       time default now(),
     updated_at timestamp,
     deleted_at timestamp
 );

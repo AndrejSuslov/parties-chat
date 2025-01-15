@@ -26,7 +26,9 @@ import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -63,8 +65,12 @@ public class ChatMessage {
     private ChatEntity chat;
 
     @CreatedDate
-    @Column(name = ChatMessage_.CREATED_AT, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = ChatMessage_.DATE, updatable = false)
+    private LocalDate date;
+
+    @CreatedDate
+    @Column(name = ChatMessage_.TIME, updatable = false)
+    private LocalTime time;
 
     @LastModifiedDate
     @Column(name = ChatMessage_.UPDATED_AT, insertable = false)
@@ -108,7 +114,8 @@ public class ChatMessage {
                 "content = " + getContent() + ", " +
                 "chatEntity = " + getChat() + ", " +
                 "type = " + getType() + ", " +
-                "createdAt = " + getCreatedAt() + ", " +
+                "date = " + getDate() + ", " +
+                "time = " + getTime() + ", " +
                 "updatedAt = " + getUpdatedAt() + ", " +
                 "deletedAt = " + getDeletedAt() + ")";
     }

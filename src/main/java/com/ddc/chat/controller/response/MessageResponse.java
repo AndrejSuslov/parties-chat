@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +21,8 @@ public class MessageResponse {
 
     private Long chatId;
 
-    private LocalDateTime createdAt;
+    private LocalDate date;
+
+    private LocalTime time;
 
 }

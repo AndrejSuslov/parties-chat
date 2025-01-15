@@ -8,10 +8,12 @@ import com.ddc.chat.entity.ChatMessage;
 import com.ddc.chat.repository.MessageRepository;
 import com.ddc.chat.service.mapper.MessageMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.ddc.chat.service.MessageService;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +30,22 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageResponse> findAllByChatIdAndSender(Long chatId, String sender) {
-        final List<ChatMessage> all = repository.findAllByIdAndSender(chatId, sender);
-        return mapper.toResponses(all);
+    public Page<MessageResponse> findAllByChatIdAndSender(Long chatId, String sender, Pageable pageable) {
+        final Page<ChatMessage> all = repository.findAllByChatIdAndSender(chatId, sender, pageable);
+        return all.map(mapper::toResponse);
     }
 
     @Override
-    public List<MessageResponse> findAllByChatId(Long chatId) {
-        List<ChatMessage> all = repository.findAllByChatId(chatId);
-        return mapper.toResponses(all);
+    public Page<MessageResponse> findAllByChatIdAndDate(Long chatId, String date, Pageable pageable) {
+        final LocalDate dateTime = LocalDate.parse(date);
+        final Page<ChatMessage> all = repository.findAllByChatIdAndDate(chatId, dateTime, pageable);
+        return all.map(mapper::toResponse);
+    }
+
+    @Override
+    public Page<MessageResponse> findAllByChatId(Long chatId, Pageable pageable) {
+        Page<ChatMessage> all = repository.findAllByChatId(chatId, pageable);
+        return all.map(mapper::toResponse);
     }
 
     @Override
