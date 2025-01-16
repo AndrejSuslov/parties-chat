@@ -48,14 +48,15 @@ public class JdbcChatRepository {
     }
 
     public void saveUsers(List<Long> chatIds, List<Long> userIds){
-        //todo: optimize this, it can be more easier
         try {
-            Map<String, Long> params = new HashMap<>();
-            for(int i = 0; i < chatIds.size(); i++){
-                params.put(CHAT_ID_QUERY_PARAM, chatIds.get(i));
-                params.put(USER_ID_QUERY_PARAM, userIds.get(i));
-                jdbcTemplate.update(INSERT_USER_IDS_AND_CHAT_ID_QUERY, params);
+            Map<String, Long>[] params = new HashMap[userIds.size()];
+            for (int i = 0; i < userIds.size(); i++) {
+                Map<String, Long> param = new HashMap<>();
+                param.put(USER_ID_QUERY_PARAM, userIds.get(i));
+                param.put(CHAT_ID_QUERY_PARAM, chatIds.get(i));
+                params[i] = param;
             }
+            jdbcTemplate.batchUpdate(INSERT_USER_IDS_AND_CHAT_ID_QUERY, params);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
