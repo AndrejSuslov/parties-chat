@@ -40,10 +40,9 @@ public class MessageController {
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
     }
 
-    // todo: how to send date correctly?
-    @GetMapping("/{chatId}/byDate/{date}")
+    @GetMapping("/{chatId}/byDate")
     public ResponseEntity<Pagination<MessageResponse>> findByDate(@PathVariable Long chatId,
-                                                            @PathVariable String date,
+                                                            @RequestBody String date, // send just like Text e.g.2025-01-15
                                                             Pageable pageable) {
         final Page<MessageResponse> all = messageService.findAllByChatIdAndDate(chatId, date, pageable);
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
