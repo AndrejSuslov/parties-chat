@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,17 +33,16 @@ public class MessageController {
     }
 
     @GetMapping("/{chatId}/{sender}")
-    public ResponseEntity<Pagination<MessageResponse>> findByUserId(@PathVariable Long chatId,
+    public ResponseEntity<Pagination<MessageResponse>> findBySender(@PathVariable Long chatId,
                                                               @PathVariable String sender,
                                                               Pageable pageable) {
-        final Page<MessageResponse> all = messageService.findAllByChatIdAndSender(chatId, sender,
-                                                                                                   pageable);
+        final Page<MessageResponse> all = messageService.findAllByChatIdAndSender(chatId, sender, pageable);
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
     }
 
     @GetMapping("/{chatId}/byDate")
     public ResponseEntity<Pagination<MessageResponse>> findByDate(@PathVariable Long chatId,
-                                                            @RequestBody String date, // send just like Text e.g.2025-01-15
+                                                            @RequestParam String date,
                                                             Pageable pageable) {
         final Page<MessageResponse> all = messageService.findAllByChatIdAndDate(chatId, date, pageable);
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
