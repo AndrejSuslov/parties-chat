@@ -32,9 +32,9 @@ public class MessageController {
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
     }
 
-    @GetMapping("/{chatId}/{sender}")
+    @GetMapping("/{chatId}/bySender")
     public ResponseEntity<Pagination<MessageResponse>> findBySender(@PathVariable Long chatId,
-                                                              @PathVariable String sender,
+                                                              @RequestParam String sender,
                                                               Pageable pageable) {
         final Page<MessageResponse> all = messageService.findAllByChatIdAndSender(chatId, sender, pageable);
         return new ResponseEntity<>(new Pagination<>(all), HttpStatus.OK);
