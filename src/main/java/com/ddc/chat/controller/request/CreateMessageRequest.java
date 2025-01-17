@@ -1,5 +1,6 @@
 package com.ddc.chat.controller.request;
 
+import com.ddc.chat.enums.MessageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ public class CreateMessageRequest {
 
     private Long chatId;
 
-    private String type;
+    private MessageType type;
 
 }

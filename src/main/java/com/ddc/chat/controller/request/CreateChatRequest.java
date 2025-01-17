@@ -1,5 +1,6 @@
 package com.ddc.chat.controller.request;
 
+import com.ddc.chat.enums.ChatType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ public class CreateChatRequest {
 
     private String name;
 
-    private String type;
+    private ChatType type;
 
     private List<Long> userIds;
 

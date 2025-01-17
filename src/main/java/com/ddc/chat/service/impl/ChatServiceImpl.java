@@ -24,7 +24,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Long create(CreateChatRequest createChatRequest) {
-        if(Objects.equals(createChatRequest.getType(), ChatType.PRIVATE.toString()) && createChatRequest.getUserIds().size() != 2) {
+        if(Objects.equals(createChatRequest.getType(), ChatType.PRIVATE) && createChatRequest.getUserIds().size() != 2) {
             throw new RuntimeException("In private chat cannot be more than 2 users");
         }
         final ChatEntity entity = mapper.toEntity(createChatRequest);
@@ -51,7 +51,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatResponse> findAllByUserIdAndType(Long userId, ChatType type) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, type.toString());
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, type);
         return mapper.toResponses(allByUserId);
     }
 

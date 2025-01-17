@@ -1,6 +1,7 @@
 package com.ddc.chat.repository;
 
 import com.ddc.chat.entity.ChatEntity;
+import com.ddc.chat.enums.ChatType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,7 +41,7 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             AND ch.type = :type
             ORDER BY ch.created_at DESC
             """, nativeQuery = true)
-    List<ChatEntity> findAllByUserIdAndType(Long userId, String type);
+    List<ChatEntity> findAllByUserIdAndType(Long userId, ChatType type);
 
     ChatEntity findByName(String name);
 
