@@ -36,11 +36,11 @@ public class ChatMessageController {
                             SimpMessageHeaderAccessor headerAccessor) {
         if (chatMessage.getType().equals(MessageType.JOIN.toString())) {
             headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-            String notification = "Пользователь " + chatMessage.getSender() + " добавлен в чат.";
+            String notification = "Пользователь " + chatMessage.getSender() + " вошел в чат.";
             chatMessage.setContent(notification);
         } else if (chatMessage.getType().equals(MessageType.LEAVE.toString())) {
             headerAccessor.getSessionAttributes().remove(chatMessage.getSender());
-            String notification = "Пользователь " + chatMessage.getSender() + " удалён из чата.";
+            String notification = "Пользователь " + chatMessage.getSender() + " вышел из чата.";
             chatMessage.setContent(notification);
         }
         ChatMessage savedMessage = messageService.create(chatMessage, chatId);
