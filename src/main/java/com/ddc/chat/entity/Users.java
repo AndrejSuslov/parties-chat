@@ -33,4 +33,11 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
+    public Users(String username, String name, String email, String password) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
 }
