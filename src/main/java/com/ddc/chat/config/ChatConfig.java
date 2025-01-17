@@ -24,7 +24,7 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
-//        config.setUserDestinationPrefix("/user"); если делать данные чисто для определеннго юзера
+//        config.setUserDestinationPrefix("/user"); // если делать данные чисто для определеннго юзера
     }
 
     @Override
