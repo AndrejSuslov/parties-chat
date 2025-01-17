@@ -16,7 +16,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = ChatEntity_.TABLE)
@@ -56,6 +60,12 @@ public class ChatEntity {
 
     @Column(name = ChatEntity_.DELETED_AT, insertable = false)
     private LocalDateTime deletedAt;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "m2m_users_chats",
+            joinColumns = {@JoinColumn(name = "chat_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
+    private List<Users> users = new ArrayList<>();
 
     public ChatEntity(Long id){
         this.id = id;

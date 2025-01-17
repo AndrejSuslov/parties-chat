@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,11 +36,21 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "m2m_users_chats",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "chat_id", referencedColumnName = "id")})
+    private List<ChatEntity> chats = new ArrayList<>();
+
     public Users(String username, String name, String email, String password) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public Users(Long id) {
+        this.id = id;
     }
 
 }
