@@ -1,5 +1,6 @@
 package com.ddc.chat.controller;
 
+import com.ddc.chat.controller.request.ChangeUsersRequest;
 import com.ddc.chat.controller.request.CreateChatRequest;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
@@ -82,6 +83,13 @@ public class ChatController {
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
         chatService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/changeUsers")
+    public ResponseEntity<HttpStatus> changeUser(@RequestBody ChangeUsersRequest request) {
+        return chatService.changeUsers(request)
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

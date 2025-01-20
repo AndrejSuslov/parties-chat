@@ -5,8 +5,10 @@ import com.ddc.chat.enums.ChatType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,5 +54,14 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             AND ch.id = m2muc.chat_id
             """, nativeQuery = true)
     List<Long> findUserIdsByName(String name);
+
+    @Modifying
+    @Query(value = """
+        DELETE FROM m2m_users_chats m2muc
+        WHERE m2muc.chat_id = :chatId
+        AND m2muc.user_id IN (:userIds)
+    """, nativeQuery = true)
+    @Transactional
+    void deleteUsersByIdAndIdIn(Long chatId, List<Long> userIds);
 
 }

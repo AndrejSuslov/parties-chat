@@ -1,5 +1,6 @@
 package com.ddc.chat.service;
 
+import com.ddc.chat.controller.request.ChangeUsersRequest;
 import com.ddc.chat.controller.request.UpdateChatRequest;
 import com.ddc.chat.controller.response.ChatResponse;
 import com.ddc.chat.controller.request.CreateChatRequest;
@@ -26,4 +27,7 @@ public interface ChatService {
     Long update(UpdateChatRequest updateChatRequest, Long id);
 
     void delete(Long chatId);
+
+    boolean changeUsers(ChangeUsersRequest changeUsersRequest);
+
 }
