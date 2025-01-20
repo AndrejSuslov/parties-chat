@@ -34,11 +34,11 @@ public class ChatMessageController {
     public void sendMessage(@Payload CreateMessageRequest chatMessage,
                             @DestinationVariable Long chatId,
                             SimpMessageHeaderAccessor headerAccessor) {
-        if (chatMessage.getType().equals(MessageType.JOIN.toString())) {
+        if (chatMessage.getType().equals(MessageType.JOIN)) {
             headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
             String notification = "Пользователь " + chatMessage.getSender() + " вошел в чат.";
             chatMessage.setContent(notification);
-        } else if (chatMessage.getType().equals(MessageType.LEAVE.toString())) {
+        } else if (chatMessage.getType().equals(MessageType.LEAVE)) {
             headerAccessor.getSessionAttributes().remove(chatMessage.getSender());
             String notification = "Пользователь " + chatMessage.getSender() + " вышел из чата.";
             chatMessage.setContent(notification);
