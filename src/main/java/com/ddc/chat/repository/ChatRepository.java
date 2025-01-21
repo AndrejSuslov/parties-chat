@@ -43,17 +43,17 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             AND ch.type = :type
             ORDER BY ch.created_at DESC
             """, nativeQuery = true)
-    List<ChatEntity> findAllByUserIdAndType(Long userId, ChatType type);
+    List<ChatEntity> findAllByUserIdAndType(Long userId, String type);
 
     ChatEntity findByName(String name);
 
-    @Query(value = """
-            SELECT m2muc.user_id FROM m2m_users_chats m2muc
-                LEFT JOIN chats ch ON ch.name = :name
-            WHERE ch.deleted_at IS NULL
-            AND ch.id = m2muc.chat_id
-            """, nativeQuery = true)
-    List<Long> findUserIdsByName(String name);
+//    @Query(value = """
+//            SELECT m2muc.user_id FROM m2m_users_chats m2muc
+//                LEFT JOIN chats ch ON ch.name = :name
+//            WHERE ch.deleted_at IS NULL
+//            AND ch.id = m2muc.chat_id
+//            """, nativeQuery = true)
+//    List<Long> findUserIdsByName(String name);
 
     @Modifying
     @Query(value = """

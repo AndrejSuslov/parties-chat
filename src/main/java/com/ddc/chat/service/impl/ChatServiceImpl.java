@@ -55,7 +55,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatResponse> findAllByUserIdAndType(Long userId, ChatType type) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, type);
+        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, type.toString());
         return mapper.toResponses(allByUserId);
     }
 
