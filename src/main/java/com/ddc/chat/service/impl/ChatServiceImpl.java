@@ -88,7 +88,7 @@ public class ChatServiceImpl implements ChatService {
                 .orElseThrow(() -> new RuntimeException("There is not chat " +
                                                                 "with id" +
                                                                 " " + changeUsersRequest.getChatId()));
-        if(chat.getType() == ChatType.PRIVATE && (changeUsersRequest.getUserIds().size() > 1 || chat.getUsers().size() == 2)) {
+        if(changeUsersRequest.getUserIds().size() > 1 || chat.getUsers().size() == 2) {
             throw new RuntimeException("In private chat cannot be more than 2 users");
         }
         final List<Users> users = changeUsersRequest.getUserIds()
