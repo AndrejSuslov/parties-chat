@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,7 +28,6 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
         AND m2muc.user_id IN (:userIds)
     """, nativeQuery = true)
     @Modifying
-    @Transactional
     void deleteUsersByChatIdAndUsers_IdIn(Long chatId, List<Long> userIds);
 
 }
