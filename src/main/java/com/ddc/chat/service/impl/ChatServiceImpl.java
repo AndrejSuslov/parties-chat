@@ -49,13 +49,13 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatResponse> findAllByUserId(Long userId) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserId(userId);
+        final List<ChatEntity> allByUserId = repository.findAllByUsers_Id(userId);
         return mapper.toResponses(allByUserId);
     }
 
     @Override
     public List<ChatResponse> findAllByUserIdAndType(Long userId, ChatType type) {
-        final List<ChatEntity> allByUserId = repository.findAllByUserIdAndType(userId, type.toString());
+        final List<ChatEntity> allByUserId = repository.findAllByUsers_IdAndType(userId, type);
         return mapper.toResponses(allByUserId);
     }
 
@@ -88,7 +88,7 @@ public class ChatServiceImpl implements ChatService {
                 .orElseThrow(() -> new RuntimeException("There is not chat " +
                                                                 "with id" +
                                                                 " " + changeUsersRequest.getChatId()));
-        if(changeUsersRequest.getUserIds().size() > 1 || chat.getUsers().size() == 2) {
+        if(changeUsersRequest.getUserIds().size() > 1 || chat.getUsers().size() == 2 && chat.getType() == ChatType.PRIVATE) {
             throw new RuntimeException("In private chat cannot be more than 2 users");
         }
         final List<Users> users = changeUsersRequest.getUserIds()
@@ -101,7 +101,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     private boolean removeUsers(ChangeUsersRequest changeUsersRequest) {
-        repository.deleteUsersByIdAndIdIn(changeUsersRequest.getChatId(), changeUsersRequest.getUserIds());
+        repository.deleteUsersByChatIdAndUsers_IdIn(changeUsersRequest.getChatId(), changeUsersRequest.getUserIds());
         final ChatEntity chat = repository.findById(changeUsersRequest.getChatId())
                 .orElseThrow(() -> new RuntimeException("There is not chat " +
                                                                 "with id" +
