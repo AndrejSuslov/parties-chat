@@ -46,7 +46,6 @@ jwt:
   refresh:
     expiration: 10000
   expiration: 5
-  secret: 676723b5fb3f2139556cc5dc8fc92fdeca12df57b7deab37c35c528f7b4608fc
 security:
   role:
     organization-administrator-id: 86
