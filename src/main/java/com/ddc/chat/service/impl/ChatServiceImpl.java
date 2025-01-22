@@ -66,10 +66,10 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Long update(UpdateChatRequest updateChatRequest, Long id) {
+    public void update(UpdateChatRequest updateChatRequest, Long id) {
         final ChatEntity entity = mapper.toEntity(updateChatRequest);
         entity.setId(id);
-        return repository.save(entity).getId();
+        repository.save(entity);
     }
 
     @Override

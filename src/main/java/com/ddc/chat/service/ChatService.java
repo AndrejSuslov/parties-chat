@@ -24,7 +24,7 @@ public interface ChatService {
 
     Page<ChatResponse> findAll(Pageable pageable);
 
-    Long update(UpdateChatRequest updateChatRequest, Long id);
+    void update(UpdateChatRequest updateChatRequest, Long id);
 
     void delete(Long chatId);
 
